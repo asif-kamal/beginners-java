@@ -9,6 +9,22 @@ public class Main {
         if (myVariable == 0) System.out.println("It is 0"); else System.out.println("It is not 0");
 
         System.out.println(calculateScore(2, 5));
+
+        char letter = 'B';
+
+        switch (letter) {
+            case 'A':
+                System.out.println("Alpha");
+                break;
+            case 'B':
+                System.out.println("Bravo");
+                break;
+            case 'C':
+                System.out.println("Charlie");
+                break;
+            default:
+                System.out.println("no results found.");
+        }
     }
 
     public static String calculateScore(int num1, int num2) {
