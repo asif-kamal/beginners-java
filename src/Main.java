@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
         int myVariable = 50;
@@ -10,21 +12,8 @@ public class Main {
 
         System.out.println(calculateScore(2, 5));
 
-        char letter = 'B';
 
-        switch (letter) {
-            case 'A':
-                System.out.println("Alpha");
-                break;
-            case 'B':
-                System.out.println("Bravo");
-                break;
-            case 'C':
-                System.out.println("Charlie");
-                break;
-            default:
-                System.out.println("no results found.");
-        }
+
     }
 
     public static String calculateScore(int num1, int num2) {
