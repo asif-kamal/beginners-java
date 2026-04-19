@@ -18,7 +18,7 @@ public class Switch {
 //                System.out.println("no results found for " + letter);
 //        }
 
-        System.out.println(switch (letter) {
+        System.out.println("NATO alphabet for " + letter + " is: " + switch (letter) {
             case "A" -> "Alpha";
             case "B" -> {
                 System.out.println("B is for Bravo");
@@ -30,6 +30,7 @@ public class Switch {
     }
 
     public static void main(String[] args) {
+        System.out.print("Enter your letter: ");
         Scanner input = new Scanner(System.in);
 
         String letter = input.nextLine();// Read a character from user input
