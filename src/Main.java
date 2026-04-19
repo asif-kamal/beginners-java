@@ -13,7 +13,6 @@ public class Main {
         System.out.println(calculateScore(2, 5));
 
 
-
     }
 
     public static String calculateScore(int num1, int num2) {
