@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class Main {
@@ -36,12 +38,21 @@ public class Main {
             throw new RuntimeException(e);
         }
 
+
+        String query = "SELECT * FROM artists;";
+
         var dataSource = new PGSimpleDataSource();
         dataSource.setDatabaseName(props.getProperty("databaseName"));
 
         try (var connection = dataSource.getConnection(System.getenv("USER"),
-                System.getenv("PASSWORD"))) {
-            System.out.println("Connected to database");
+                System.getenv("PASSWORD"));
+             Statement stmt = connection.createStatement();
+             ) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                System.out.printf("%d %s %n", rs.getInt(1), rs.getString("artist_name")
+                        );
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
