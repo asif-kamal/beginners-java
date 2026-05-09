@@ -58,12 +58,16 @@ public class Main {
             }
             System.out.println("==========================");
 
+            for (int i = 1; i <= meta.getColumnCount(); i++) {
+                System.out.printf("%-15s", meta.getColumnName(i).toUpperCase());
+            }
+            System.out.println();
+
             while (rs.next()) {
-                System.out.printf("%d %s %s %n",
-                        rs.getInt("track_number"),
-                        rs.getString("artist_name"),
-                        rs.getString("song_title")
-                        );
+                for (int i = 1; i <= meta.getColumnCount(); i++) {
+                    System.out.printf("%-15s", rs.getString(i));
+                }
+                System.out.println();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
