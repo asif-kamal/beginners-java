@@ -38,8 +38,8 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-
-        String query = "SELECT * FROM artists;";
+        String albumName = "Tapestry";
+        String query = "SELECT * FROM albumview WHERE album_name = '%s';".formatted(albumName);
 
         var dataSource = new PGSimpleDataSource();
         dataSource.setDatabaseName(props.getProperty("databaseName"));
@@ -48,9 +48,21 @@ public class Main {
                 System.getenv("PASSWORD"));
              Statement stmt = connection.createStatement();
              ) {
+
             ResultSet rs = stmt.executeQuery(query);
+            var meta = rs.getMetaData();
+
+            for (int i = 1; i <= meta.getColumnCount(); i++) {
+                System.out.printf("%d %s %s %n", i,
+                        meta.getColumnName(i), meta.getColumnTypeName(i));
+            }
+            System.out.println("==========================");
+
             while (rs.next()) {
-                System.out.printf("%d %s %n", rs.getInt(1), rs.getString("artist_name")
+                System.out.printf("%d %s %s %n",
+                        rs.getInt("track_number"),
+                        rs.getString("artist_name"),
+                        rs.getString("song_title")
                         );
             }
         } catch (SQLException e) {
