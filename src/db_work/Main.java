@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class Main {
 
@@ -38,7 +39,10 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        String albumName = "Tapestry";
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter an album name: ");
+
+        String albumName = scanner.nextLine();
         String query = "SELECT * FROM albumview WHERE album_name = '%s';".formatted(albumName);
 
         var dataSource = new PGSimpleDataSource();
@@ -52,10 +56,6 @@ public class Main {
             ResultSet rs = stmt.executeQuery(query);
             var meta = rs.getMetaData();
 
-            for (int i = 1; i <= meta.getColumnCount(); i++) {
-                System.out.printf("%d %s %s %n", i,
-                        meta.getColumnName(i), meta.getColumnTypeName(i));
-            }
             System.out.println("==========================");
 
             for (int i = 1; i <= meta.getColumnCount(); i++) {
