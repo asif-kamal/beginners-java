@@ -39,14 +39,11 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter an album name: ");
-
-        String albumName = scanner.nextLine();
-        String query = "SELECT * FROM albumview WHERE album_name = '%s';".formatted(albumName);
-
         var dataSource = new PGSimpleDataSource();
         dataSource.setDatabaseName(props.getProperty("databaseName"));
+
+
+        String query = "SELECT * FROM artists LIMIT 10;";
 
         try (var connection = dataSource.getConnection(System.getenv("USER"),
                 System.getenv("PASSWORD"));
