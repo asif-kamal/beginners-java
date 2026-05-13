@@ -12,13 +12,14 @@ public class MusicDML {
                 System.getenv("PASSWORD"));
              Statement statement = conn.createStatement()
         ) {
-            String artist = "Neil Young";
-            String query = "SELECT * FROM artists WHERE artist_name='%s'".formatted(artist);
-            boolean result = statement.execute(query);
-            var rs = statement.getResultSet();
-            boolean found = (rs!=null && rs.next());
-            System.out.println("Result: " + result);
-            System.out.println("Artist was " + (found? "found" : "not found"));
+            String tableName = "artists";
+            String columnName = "artist_name";
+            String columnValue = "Bob Dylan";
+
+            if(!executeSelect(statement, tableName, columnName, columnValue)) {
+                System.out.println("Maybe we should add this record");
+                insertRecord(statement, tableName, new String[]{columnName}, new String[]{columnValue});
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,5 +58,18 @@ public class MusicDML {
         }
         return false;
 
+    }
+    private static boolean insertRecord(Statement stmt, String tableName, String[] columnNames, String[] columnValues) throws SQLException {
+
+        String colNames = String.join(", ", columnNames);
+        String colValues = String.join("','", columnValues);
+        String query = "INSERT INTO %s (%s) VALUES ('%s')".formatted(tableName, colNames, colValues);
+        System.out.println(query);
+        boolean insertResult = stmt.execute(query);
+        int recordsInserted = stmt.getUpdateCount();
+        if (recordsInserted > 0) {
+            executeSelect(stmt, tableName, columnNames[0], columnValues[0]);
+        }
+        return recordsInserted > 0;
     }
 }
