@@ -14,11 +14,10 @@ public class MusicDML {
         ) {
             String tableName = "artists";
             String columnName = "artist_name";
-            String columnValue = "Elf";
+            String columnValue = "Bob Dylan";
 
             if(!executeSelect(statement, tableName, columnName, columnValue)) {
-                System.out.println("Maybe we should add this record");
-                insertRecord(statement, tableName, new String[]{columnName}, new String[]{columnValue});
+                insertArtistAlbum(statement, columnValue, columnValue);
             } else{
                 //boolean deleted = deleteRecord(statement, tableName, columnName, columnValue);
                 //System.out.println("Deleted record: " + deleted);
@@ -102,5 +101,39 @@ public class MusicDML {
             executeSelect(stmt, tableName, updatedColumn, updatedValue);
         }
         return recordsUpdated > 0;
+    }
+
+    private static void insertArtistAlbum(Statement stmt, String artistName, String albumName) throws SQLException {
+        String artistInsert = "INSERT INTO artists (artist_name) VALUES (%s)".formatted(stmt.enquoteLiteral(artistName));
+        System.out.println(artistInsert);
+        stmt.execute(artistInsert, Statement.RETURN_GENERATED_KEYS);
+
+        ResultSet rs = stmt.getGeneratedKeys();
+        int artistId = (rs != null && rs.next()) ? rs.getInt(1) : -1;
+        String albumInsert = ("INSERT INTO albumview (album_name, artistId)" + " VALUES (%s, %d)")
+                .formatted(stmt.enquoteLiteral(albumName), artistId);
+        System.out.println(albumInsert);
+        stmt.execute(albumInsert, Statement.RETURN_GENERATED_KEYS);
+        rs = stmt.getGeneratedKeys();
+        int albumId = (rs != null && rs.next()) ? rs.getInt(1) : -1;
+
+        String[] songs = new String[]{
+                "You're No Good",
+                "Talkin' New York",
+                "In My Time Of Dyin'",
+                "Man Of Constant Sorrow",
+                "Fixin' To Die",
+                "Pretty Peggy-O",
+                "Highway 51 Blues"
+        };
+
+        String songInsert = "INSERT INTO songs " + "(trackNumber, song_title, albumId) VALUES (%d, %s, %d)";
+
+        for (int i = 0; i < songs.length; i++) {
+            String songQuery = songInsert.formatted(i + 1, stmt.enquoteLiteral(songs[i]), albumId);
+            System.out.println(songQuery);
+            stmt.execute(songQuery);
+        }
+        executeSelect(stmt, "albumview", "album_name", "Bob Dylan");
     }
 }
