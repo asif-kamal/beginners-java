@@ -110,7 +110,7 @@ public class MusicDML {
 
         ResultSet rs = stmt.getGeneratedKeys();
         int artistId = (rs != null && rs.next()) ? rs.getInt(1) : -1;
-        String albumInsert = ("INSERT INTO albumview (album_name, artistId)" + " VALUES (%s, %d)")
+        String albumInsert = ("INSERT INTO albums (album_name, artist_id)" + " VALUES (%s, %d)")
                 .formatted(stmt.enquoteLiteral(albumName), artistId);
         System.out.println(albumInsert);
         stmt.execute(albumInsert, Statement.RETURN_GENERATED_KEYS);
@@ -127,7 +127,7 @@ public class MusicDML {
                 "Highway 51 Blues"
         };
 
-        String songInsert = "INSERT INTO songs " + "(trackNumber, song_title, albumId) VALUES (%d, %s, %d)";
+        String songInsert = "INSERT INTO songs " + "(track_number, song_title, album_id) VALUES (%d, %s, %d)";
 
         for (int i = 0; i < songs.length; i++) {
             String songQuery = songInsert.formatted(i + 1, stmt.enquoteLiteral(songs[i]), albumId);
